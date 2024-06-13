@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import Image from 'next/image';
 import Pen from '../../../public/pen.svg';
 import React from 'react';
-import "../styles/respons_list.css";
 import { data } from './temp_json';
 
 const ResponsList = () => {
@@ -49,10 +48,10 @@ const ResponsList = () => {
     return (
         <>
             <div>
-                <h3 className="text-lg mb-4">{data.title}</h3> {/* Используйте title из данных */}
+                <h3 className="text-lg mb-4 font-extralight">{data.title}</h3>
                 <ul>
-                    {data.items.map((item, index) => ( // Используйте items из данных
-                        <li className="text-sm mb-3 " key={index}>
+                    {data.items.map((item, index) => ( 
+                        <li className="text-sm mb-3" key={index}>
                             <span 
                             className="editable-field"
                             ref={refs.current[index]}
