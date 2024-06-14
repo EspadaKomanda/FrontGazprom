@@ -7,8 +7,8 @@ import React from 'react';
 import { data } from './temp_json';
 
 const ResponsList = () => {
-    const [isEditing, setIsEditing] = useState([false, false, false, false]); // Состояние для каждого элемента li
-    const refs = useRef([React.createRef(), React.createRef(), React.createRef(), React.createRef()]); // Создаем ref для каждого элемента li
+    const [isEditing, setIsEditing] = useState([false, false, false, false]);
+    const refs = useRef([React.createRef(), React.createRef(), React.createRef(), React.createRef()]);
 
     const handleClick = (index) => {
         const newIsEditing = [...isEditing];
