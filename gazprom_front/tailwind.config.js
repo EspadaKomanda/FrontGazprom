@@ -7,6 +7,8 @@ module.exports = {
   ],
   theme: {
     extend: {
+      filter: ['hover', 'focus'], 
+      invert: ['hover', 'focus'],
       colors: {
         'custom-gray': '#F4F6FA',
       },

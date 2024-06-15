@@ -10,7 +10,6 @@ export default function Home() {
       <main className='flex flex-1'>
         <SideBare />
         <AIChatComponent/>
-        <Settings/>
       </main>  
     </>
   ); 
