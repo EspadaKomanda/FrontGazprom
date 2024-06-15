@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 export default function ProfilePopup() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   return (
     <div className="flex items-center justify-center">

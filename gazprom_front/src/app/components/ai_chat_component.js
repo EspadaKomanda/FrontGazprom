@@ -11,7 +11,7 @@ import ProfilePopup from './profile';
 function AIChatComponent() {
   const [newChat, setNewChat] = useState(true);
   const textareaRef = useRef(null);
-  const [authentication, setAuthentication] = useState('false');
+  const [authentication, setAuthentication] = useState(true);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -124,7 +124,7 @@ return (
                 </button>
             </div>
         </div>
-         {authentication === 'false' ? <Authentication /> : <ProfilePopup />}
+         {authentication == false ? <Authentication /> : <ProfilePopup />}
     </div>
 );
 }
