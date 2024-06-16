@@ -17,7 +17,7 @@ const ColorChoose = () => {
     return (<>
     
     <input type="color" id="colorPicker" ref={colorPicker} value={selectedColor} onChange={handleColorChange} style={{display: 'none'}}></input>
-    <button onClick={() => colorPicker.current.click()} style={{backgroundColor: selectedColor}} className='p-5 rounded-md'></button>
+    <button onClick={() => colorPicker.current.click()} style={{backgroundColor: selectedColor}} className='p-5 rounded-md color-button'></button>
     <div id="colorDisplay" ref={colorDisplay}></div>
     
     </>

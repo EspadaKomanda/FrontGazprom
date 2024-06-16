@@ -1,5 +1,41 @@
+import config from '../config';
+
 
 export default function Authentication({ onClose }) {
+
+
+  // const handleAuthentication = () => {
+
+  //   const username = document.querySelector('input[type="text"]').value;
+  //   const password = document.querySelector('input[type="password"]').value;
+
+  //   if (username && password) {
+
+  //     fetch(config.Auth, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json'
+  //       },
+  //       body: JSON.stringify({
+  //         username: username,
+  //         password: password
+  //       })
+  //     })
+  //       .then(response => {
+  //         if (response.ok) {
+
+  //         } else {
+  //           throw new Error('Failed to authenticate');
+  //         }
+  //       })
+  //       .catch(error => {
+  //         console.error(error);
+  //       });
+  //   } else {
+  //     alert('Please enter a username and password');
+  //   }
+  //   console.log('username: ', username, 'password: ', password);
+  // };
 
   return (
     <div className="flex items-center justify-center">
@@ -31,6 +67,10 @@ export default function Authentication({ onClose }) {
                 <button
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                   type="button"
+                  onClick={() => {
+                    handleAuthentication();
+                    onClose();
+                  }}
                 >
                   Войти
                 </button>
