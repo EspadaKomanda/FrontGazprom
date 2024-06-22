@@ -15,10 +15,12 @@ import rt from '../../public/rt.svg';
 
 export default function Settings({props}) {
     const [activeIndex, setActiveIndex] = useState(null);
-    const [colorChooseCount, setColorChooseCount] = useState(1);
+    const [colorChooseCount, setColorChooseCount] = useState(0);
     const colorChooseComponents = Array.from({ length: colorChooseCount }, (_, index) => (
-        <ColorChoose key={index} props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor}}/>
+        <ColorChoose key={index} props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor, index: index}}/>
     ));
+
+    console.log(props.selectedColor);
 
     const handleClick = (index) => {
         if (activeIndex === index) {
@@ -30,13 +32,13 @@ export default function Settings({props}) {
 
     const handleAddColorChoose = () => {
         setColorChooseCount(colorChooseCount + 1);
+        props.setSelectedColor([...props.selectedColor, '#fff']);
     };
 
     const handleRemoveColorChoose = () => {
         setColorChooseCount(colorChooseCount - 1);
+        props.setSelectedColor(props.selectedColor.slice(0, -1));
     };
-
-
     
   const [lastClicked, setLastClicked] = useState(null);
 

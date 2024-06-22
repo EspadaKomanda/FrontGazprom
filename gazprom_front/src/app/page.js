@@ -9,7 +9,7 @@ import {Toaster} from "sonner";
 
 export default function Home() {
 
-  const [selectedColor, setSelectedColor] = React.useState('#ffffff');
+  const [selectedColor, setSelectedColor] = React.useState([]);
   const [selectedImage, setSelectedImage] = React.useState(null);
 
   return (
