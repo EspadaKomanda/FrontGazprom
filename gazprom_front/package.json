@@ -13,7 +13,8 @@
     "react": "^18",
     "react-dom": "^18",
     "react-helmet": "^6.1.0",
-    "react-helmet-async": "^2.0.5"
+    "react-helmet-async": "^2.0.5",
+    "sonner": "^1.5.0"
   },
   "devDependencies": {
     "eslint": "^8",

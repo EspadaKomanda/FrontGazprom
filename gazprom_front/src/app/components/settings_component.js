@@ -13,7 +13,7 @@ import lt from '../../../public/lt.svg';
 import rb from '../../../public/rb.svg';
 import rt from '../../../public/rt.svg';
 
-const Settings = () => {
+export default function Settings({props}) {
     const [activeIndex, setActiveIndex] = useState(null);
 
     const [colorChooseCount, setColorChooseCount] = useState(1);
@@ -48,6 +48,7 @@ const Settings = () => {
           setSelectedImage(index);
         }
         setLastClicked(index);
+        props.setData({ ...props.data, image_location: index });
       };
 
     return (
@@ -112,6 +113,3 @@ const Settings = () => {
         </div>
     );
 }
-
-
-export default Settings;

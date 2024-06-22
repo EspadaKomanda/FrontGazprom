@@ -12,7 +12,7 @@ import Settings from './settings_component';
 import config from '../config';
 
 
-function AIChatComponent() {
+function AIChatComponent({props}) {
   const [newChat, setNewChat] = useState(true);
   const textareaRef = useRef(null);
   const [authentication, setAuthentication] = useState(false);
@@ -252,7 +252,7 @@ return (
                 {authentication === false ? <Authentication onClose={handleImageClick}/> : <ProfilePopup onClose={handleImageClick} />}
             </div>
         </div>
-        {settingsOn ? <Settings /> : null}
+        {settingsOn ? <Settings props={{data: props.data, setData: props.setData}} /> : null}
         
     </div>
 );
