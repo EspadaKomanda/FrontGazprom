@@ -8,7 +8,6 @@ const ColorChoose = ({ props }) => {
     const colorDisplay = useRef(null);
 
     const handleColorChange = (event) => {
-        console.log(props.selectedColor)
         changeState(event)
         if (colorDisplay.current) {
             colorDisplay.current.style.backgroundColor = event.target.value;

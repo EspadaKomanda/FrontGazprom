@@ -52,7 +52,7 @@ function AIChatComponent({props}) {
         }
     };
 
-    const [emailPopupOpen, setEmailPopupOpen] = useState(true);
+    // const [emailPopupOpen, setEmailPopupOpen] = useState(true);
     const [email, setEmail] = useState('');
     const handleEmailSubmit = () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -77,7 +77,7 @@ function AIChatComponent({props}) {
                     console.error(error);
                 });
           
-            setEmailPopupOpen(false);
+            // setEmailPopupOpen(false);
         } else {
           alert('Please enter a valid email address');
         }
@@ -87,6 +87,8 @@ function AIChatComponent({props}) {
     const [inputValue, setInputValue] = useState('');
 
     const handleSendMessage = async () => {
+        console.log(props.transparentBackground);
+        console.log(props.useCustomColors);
         if (inputValue.trim() !== '') {
             const newMessage = {
                 id: messages.length + 1,
@@ -99,7 +101,6 @@ function AIChatComponent({props}) {
 
             const [imageUrls, setImageUrls] = useState([]);
 
-
             try {
                 const response = await fetch(config.ImageAgrigation, {
                     method: 'POST',
@@ -110,28 +111,26 @@ function AIChatComponent({props}) {
                         templateName: 'my-template',
                         text: newMessage.text,
                         imageText: '',
-                        allowedColors: '',
+                        allowedColors: props.selectedColor,
                         resolution: {
-                            width: '',
-                            height: '',
+                            width: props.imageWidth,
+                            height: props.imageHeight,
                         },
                         position: {
-                            position: '',
+                            position: props.lastClicked,
                         },
                         fontName: '',
-                        background: '',
-                        checkColours: '',
+                        background: props.transparentBackground,
+                        checkColours: props.useCustomColors,
                     }),
                 });
                 if (response.ok) {
                     const data = await response.json();
                     const imageUrl = data.url;
-                
                     setImageUrls(prevUrls => [...prevUrls, imageUrl]);
                 } else {
                     console.error('Failed to send message');
                 }
-                console.log(data);
             } catch (error) {
                 console.error('Error sending message:', error);
             }
@@ -148,7 +147,7 @@ function AIChatComponent({props}) {
 
 return (
     <div className='flex flex-1'>
-        {emailPopupOpen && (
+        {/* {emailPopupOpen && (
   <div className='fixed z-10 inset-0 overflow-y-auto flex items-center justify-center'>
     <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
     <div className="inline-block align-bottom bg-white py-5 px-2 rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
@@ -161,7 +160,7 @@ return (
       </div>
     </div>
   </div>
-)}
+)} */}
         <div className='flex-1 relative flex flex-col h-screen'>
             <div className='flex-1 overflow-auto p-7'>
                 <Image src={account} alt="account" width={50} className='top-4 right-10 absolute' onClick={handleImageClick}/>
@@ -240,9 +239,7 @@ return (
                 {authentication === false ? <Authentication onClose={handleImageClick}/> : <ProfilePopup onClose={handleImageClick} />}
             </div>
         </div>
-    
-        {settingsOn ? <Settings props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor}} /> : null}
-        
+        {settingsOn ? <Settings props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor, lastClicked: props.lastClicked, setLastClicked: props.setLastClicked, imageHeight: props.imageHeight, setImageHeight: props.setImageHeight, imageWidth: props.imageWidth, setImageWidth: props.setImageWidth, useCustomColors: props.useCustomColors, setUseCustomColors: props.setUseCustomColors, transparentBackground: props.transparentBackground, setTransparentBackground: props.setTransparentBackground }} /> : null}
     </div>
 );
 }

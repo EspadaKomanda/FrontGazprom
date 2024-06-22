@@ -34,7 +34,6 @@ export default function Authentication({ onClose }) {
     } else {
       alert('Please enter a username and password');
     }
-    console.log('username: ', username, 'password: ', password);
   };
 
   return (

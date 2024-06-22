@@ -20,7 +20,6 @@ export default function Settings({props}) {
         <ColorChoose key={index} props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor, index: index}}/>
     ));
 
-    console.log(props.selectedColor);
 
     const handleClick = (index) => {
         if (activeIndex === index) {
@@ -39,66 +38,73 @@ export default function Settings({props}) {
         setColorChooseCount(colorChooseCount - 1);
         props.setSelectedColor(props.selectedColor.slice(0, -1));
     };
-    
-  const [lastClicked, setLastClicked] = useState(null);
 
+    const [selectedImage, setSelectedImage] = React.useState(null);
     const handleImageClick = (index) => {
         if (selectedImage === index) {
           setSelectedImage(null);
         } else {
           setSelectedImage(index);
         }
-        setLastClicked(index);
-      };
+        props.setLastClicked(index);
+    };
+
+    const handleUseCustomColorsChange = (e) => {
+        props.setUseCustomColors(e.target.checked);
+    };
+
+    const handleTransparentBackgroundChange = (e) => {
+        props.setTransparentBackground(e.target.checked);
+    };
 
     return (
         <div className="bg-gray-200 w-1/5 max-w-80 h-screen overflow-y-auto scrollbar-hide font-light border-l-2 border-l-gray-400">
             <h2 className="text-base text-center p-8">Дополнительные настройки</h2>
             <div className="flex flex-col pb-0">
-                <button className={`text-left p-3 ${activeIndex === 1 ? 'bg-blue-500 text-white mb-px' : 'mb-4 bg-white text-blue-500'}`} onClick={() => handleClick(1)}> &gt; Масштаб</button>
-                {activeIndex === 1 && (
+                <button className={`text-left p-3 ${activeIndex === 'scale' ? 'bg-blue-500 text-white mb-px' : 'mb-4 bg-white text-blue-500'}`} onClick={() => handleClick('scale')}> &gt; Масштаб</button>
+                {activeIndex === 'scale' && (
                     <div className=' bg-blue-500 text-white px-3 py-5'>
-                        <p >Ширина: <input type="number" defaultValue="512" className='editable-field bg-blue-500 w-12 mb-2' />px</p>
-                        <p >Высота: <input type="number" defaultValue="512" className='editable-field bg-blue-500 w-12 mb-4' />px</p>
+                        <p >Ширина: <input type="number" value={props.imageWidth} onChange={(e) => props.setImageWidth(e.target.value)} className='editable-field bg-blue-500 w-14 mb-2' min="128" max="4096" step="128" />px</p>
+                        <p >Высота: <input type="number" value={props.imageHeight} onChange={(e) => props.setImageHeight(e.target.value)} className='editable-field bg-blue-500 w-14 mb-4' min="128" max="4096" step="128" />px</p>
                         <p>Расположение:</p>
                         <div className='flex flex-1 gap-1'>
-                            <button onClick={() => handleImageClick(1)}>
-                                <Image src={cb} alt="Panel" className={`mr-4 ${selectedImage === 1 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('center_bottom')}>
+                                <Image src={cb} alt="Panel" className={`mr-4 ${selectedImage === 'center_bottom' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(2)}>
-                                <Image src={cc} alt="Panel" className={`mr-4 ${selectedImage === 2 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('center_center')}>
+                                <Image src={cc} alt="Panel" className={`mr-4 ${selectedImage === 'center_center' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(3)}>
-                                <Image src={cl} alt="Panel" className={`mr-4 ${selectedImage === 3 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('left_center')}>
+                                <Image src={cl} alt="Panel" className={`mr-4 ${selectedImage === 'left_center' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(4)}>
-                                <Image src={cr} alt="Panel" className={`mr-4 ${selectedImage === 4 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('right_center')}>
+                                <Image src={cr} alt="Panel" className={`mr-4 ${selectedImage === 'right_center' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(5)}>
-                                <Image src={ct} alt="Panel" className={`mr-4 ${selectedImage === 5 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('center_top')}>
+                                <Image src={ct} alt="Panel" className={`mr-4 ${selectedImage === 'center_top' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(6)}>
-                                <Image src={lb} alt="Panel" className={`mr-4 ${selectedImage === 6 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('left_bottom')}>
+                                <Image src={lb} alt="Panel" className={`mr-4 ${selectedImage === 'left_bottom' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(7)}>
-                                <Image src={lt} alt="Panel" className={`mr-4 ${selectedImage === 7 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('left_top')}>
+                                <Image src={lt} alt="Panel" className={`mr-4 ${selectedImage === 'left_top' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(8)}>
-                                <Image src={rb} alt="Panel" className={`mr-4 ${selectedImage === 8 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('right_bottom')}>
+                                <Image src={rb} alt="Panel" className={`mr-4 ${selectedImage === 'right_bottom' ? 'invert' : ''}`} />
                             </button>
-                            <button onClick={() => handleImageClick(9)}>
-                                <Image src={rt} alt="Panel" className={`mr-4 ${selectedImage === 9 ? 'invert' : ''}`} />
+                            <button onClick={() => handleImageClick('right_top')}>
+                                <Image src={rt} alt="Panel" className={`mr-4 ${selectedImage === 'right_top' ? 'invert' : ''}`} />
                             </button>
                         </div>
                     </div>
                 )}
-                <button className={`text-left p-3 ${activeIndex === 2 ? 'bg-blue-500 text-white mb-px' : 'bg-white text-blue-500'}`} onClick={() => handleClick(2)}> &gt; Цвета</button>
-                {activeIndex === 2 && (
+                <button className={`text-left p-3 ${activeIndex === 'colors' ? 'bg-blue-500 text-white mb-px' : 'bg-white text-blue-500'}`} onClick={() => handleClick('colors')}> &gt; Цвета</button>
+                {activeIndex === 'colors' && (
                     <div className=' bg-blue-500 text-white px-3 py-5'>
                         <p className='mb-3 text-lg'>Настройки цветов</p>
                         <form>
-                            <p>Использовать свои цвета<input type='checkbox' className='ml-2 editable-field' /></p>
-                            <p>Прозрачный фон<input type='checkbox' className='ml-2 editable-field' /></p>
+                            <p>Использовать свои цвета<input type='checkbox' className='ml-2 editable-field' checked={props.useCustomColors} onChange={handleUseCustomColorsChange} /></p>
+                            <p>Прозрачный фон<input type='checkbox' className='ml-2 editable-field' checked={props.transparentBackground} onChange={handleTransparentBackgroundChange} /></p>
                         </form>
                         <div className='flex gap-3 mt-3 flex-wrap'>
                             {colorChooseComponents}
