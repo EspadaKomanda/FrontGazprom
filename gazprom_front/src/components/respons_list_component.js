@@ -2,9 +2,9 @@
 
 import { useState, useRef, useEffect } from "react";
 import Image from 'next/image';
-import Pen from '../../../public/pen.svg';
+import Pen from '../../public/pen.svg';
 import React from 'react';
-import { data } from './temp_json';
+import { data } from './temp_json.json';
 
 const ResponsList = () => {
     const [isEditing, setIsEditing] = useState([false, false, false, false]);

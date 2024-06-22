@@ -2,14 +2,14 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import Image from 'next/image';
-import account from '../../../public/account.svg';
-import panel from '../../../public/panel.svg';
-import avatar from '../../../public/avatar.svg';
-import statistic from '../../../public/statistic.svg';
+import account from '../../public/account.svg';
+import panel from '../../public/panel.svg';
+import avatar from '../../public/avatar.svg';
+import statistic from '../../public/statistic.svg';
 import Authentication from './authentication';
 import ProfilePopup from './profile';
 import Settings from './settings_component';
-import config from '../config';
+import config from '../app/config';
 
 
 function AIChatComponent({props}) {

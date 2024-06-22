@@ -3,15 +3,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import ColorChoose from './color_choose_component';
 import Image from 'next/image';
-import cb from '../../../public/cb.svg';
-import cc from '../../../public/cc.svg';
-import cl from '../../../public/cl.svg';
-import cr from '../../../public/cr.svg';
-import ct from '../../../public/ct.svg';
-import lb from '../../../public/lb.svg';
-import lt from '../../../public/lt.svg';
-import rb from '../../../public/rb.svg';
-import rt from '../../../public/rt.svg';
+import cb from '../../public/cb.svg';
+import cc from '../../public/cc.svg';
+import cl from '../../public/cl.svg';
+import cr from '../../public/cr.svg';
+import ct from '../../public/ct.svg';
+import lb from '../../public/lb.svg';
+import lt from '../../public/lt.svg';
+import rb from '../../public/rb.svg';
+import rt from '../../public/rt.svg';
 
 export default function Settings({props}) {
     const [activeIndex, setActiveIndex] = useState(null);

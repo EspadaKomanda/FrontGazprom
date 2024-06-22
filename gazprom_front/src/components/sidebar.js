@@ -1,4 +1,4 @@
-import Logo from '../../../public/logo.svg';
+import Logo from '../../public/logo.svg';
 import Image from 'next/image';
 import ResponsList from './respons_list_component';
 

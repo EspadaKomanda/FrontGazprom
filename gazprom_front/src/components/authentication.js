@@ -1,4 +1,4 @@
-import config from '../config';
+import config from '../app/config';
 
 
 export default function Authentication({ onClose }) {
