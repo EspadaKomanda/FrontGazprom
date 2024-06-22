@@ -27,11 +27,11 @@ function AIChatComponent({props}) {
     setNewChat(false);
     setThemeId(e);
     console.log(newChat);
-    // if (newChat) {
-    //     const response = await fetch(config.User);
-    //     const userInfo = await response.json();
+    if (newChat) {
+        const response = await fetch(config.User);
+        const userInfo = await response.json();
         
-    // }
+    }
 }
 
   useEffect(() => {
@@ -52,37 +52,36 @@ function AIChatComponent({props}) {
         }
     };
 
-//   const [emailPopupOpen, setEmailPopupOpen] = useState(true); // New state for email popup
-//   const [email, setEmail] = useState('');
-    // const handleEmailSubmit = () => {
-    //     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    //     if (emailRegex.test(email)) {
+    const [emailPopupOpen, setEmailPopupOpen] = useState(true);
+    const [email, setEmail] = useState('');
+    const handleEmailSubmit = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(email)) {
 
-    //         fetch('/Account/register', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json'
-    //             },
-    //             body: JSON.stringify({
-    //                 email: email
-    //             })
-    //         })
-    //             .then(response => {
-    //                 if (response.ok) {
-    //                     // //Handle successful response
-    //                 } else {
-    //                     throw new Error('Failed to register');
-    //                 }
-    //             })
-    //             .catch(error => {
-    //                 console.error(error);
-    //             });
+            fetch('/Account/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: email
+                })
+            })
+                .then(response => {
+                    if (response.ok) {
+                    } else {
+                        throw new Error('Failed to register');
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                });
           
-    //         setEmailPopupOpen(false);
-    //     } else {
-    //       alert('Please enter a valid email address');
-    //     }
-    //   };
+            setEmailPopupOpen(false);
+        } else {
+          alert('Please enter a valid email address');
+        }
+    };
 
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
@@ -96,57 +95,46 @@ function AIChatComponent({props}) {
             setMessages([...messages, newMessage]);
             setInputValue('');
             setNewChat(false);
-
-            const colorInputs = document.querySelectorAll('.color-button');
-            const allowedColors = Array.from(colorInputs).map(button => {
-                const rgbValues = button.value.split(',').map(Number);
-                return rgbValues;
-            });
     
 
-            // const [imageUrls, setImageUrls] = useState([]);
+            const [imageUrls, setImageUrls] = useState([]);
 
-            const widthInput = document.querySelector('.editable-field');
-            const heightInput = document.querySelectorAll('.editable-field')[1];
-            const widthValue = parseInt(widthInput.value, 10);
-            const heightValue = parseInt(heightInput.value, 10);
-            console.log(newMessage);
 
-            // try {
-            //     const response = await fetch(config.ImageAgrigation, {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json',
-            //         },
-            //         body: JSON.stringify({
-            //             templateName: 'my-template',
-            //             text: newMessage.text,
-            //             imageText: '',
-            //             allowedColors: allowedColors,
-            //             resolution: {
-            //                 width: 512,
-            //                 height: 512,
-            //             },
-            //             position: {
-            //                 position: 'resize',
-            //             },
-            //             fontName: '',
-            //             background: '',
-            //             checkColours: false,
-            //         }),
-            //     });
-            //     if (response.ok) {
-            //         const data = await response.json();
-            //         const imageUrl = data.url;
+            try {
+                const response = await fetch(config.ImageAgrigation, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        templateName: 'my-template',
+                        text: newMessage.text,
+                        imageText: '',
+                        allowedColors: '',
+                        resolution: {
+                            width: '',
+                            height: '',
+                        },
+                        position: {
+                            position: '',
+                        },
+                        fontName: '',
+                        background: '',
+                        checkColours: '',
+                    }),
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    const imageUrl = data.url;
                 
-            //         setImageUrls(prevUrls => [...prevUrls, imageUrl]);
-            //     } else {
-            //         console.error('Failed to send message');
-            //     }
-            //     console.log(data);
-            // } catch (error) {
-            //     console.error('Error sending message:', error);
-            // }
+                    setImageUrls(prevUrls => [...prevUrls, imageUrl]);
+                } else {
+                    console.error('Failed to send message');
+                }
+                console.log(data);
+            } catch (error) {
+                console.error('Error sending message:', error);
+            }
         }
     };
     
@@ -160,7 +148,7 @@ function AIChatComponent({props}) {
 
 return (
     <div className='flex flex-1'>
-        {/* {emailPopupOpen && (
+        {emailPopupOpen && (
   <div className='fixed z-10 inset-0 overflow-y-auto flex items-center justify-center'>
     <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
     <div className="inline-block align-bottom bg-white py-5 px-2 rounded-lg text-left overflow-hidden shadow-xl transform transition-all">
@@ -173,7 +161,7 @@ return (
       </div>
     </div>
   </div>
-)} */}
+)}
         <div className='flex-1 relative flex flex-col h-screen'>
             <div className='flex-1 overflow-auto p-7'>
                 <Image src={account} alt="account" width={50} className='top-4 right-10 absolute' onClick={handleImageClick}/>
@@ -252,7 +240,8 @@ return (
                 {authentication === false ? <Authentication onClose={handleImageClick}/> : <ProfilePopup onClose={handleImageClick} />}
             </div>
         </div>
-        {settingsOn ? <Settings props={{data: props.data, setData: props.setData}} /> : null}
+    
+        {settingsOn ? <Settings props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor}} /> : null}
         
     </div>
 );

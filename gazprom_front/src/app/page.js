@@ -9,13 +9,14 @@ import {Toaster} from "sonner";
 
 export default function Home() {
 
-  const [data, setData] = React.useState({});
+  const [selectedColor, setSelectedColor] = React.useState('#ffffff');
+  const [selectedImage, setSelectedImage] = React.useState(null);
 
   return (
     <>
       <main className='flex flex-1'>
-        <SideBare props={{data: data, setData: setData}}/>
-        <AIChatComponent props={{data: data, setData: setData}}/>
+        <SideBare />
+        <AIChatComponent props={{selectedColor, setSelectedColor, selectedImage, setSelectedImage }}/>
       </main>  
     </>
   ); 

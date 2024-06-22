@@ -4,38 +4,38 @@ import config from '../app/config';
 export default function Authentication({ onClose }) {
 
 
-  // const handleAuthentication = () => {
+  const handleAuthentication = () => {
 
-  //   const username = document.querySelector('input[type="text"]').value;
-  //   const password = document.querySelector('input[type="password"]').value;
+    const username = document.querySelector('input[type="text"]').value;
+    const password = document.querySelector('input[type="password"]').value;
 
-  //   if (username && password) {
+    if (username && password) {
 
-  //     fetch(config.Auth, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json'
-  //       },
-  //       body: JSON.stringify({
-  //         username: username,
-  //         password: password
-  //       })
-  //     })
-  //       .then(response => {
-  //         if (response.ok) {
+      fetch(config.Auth, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          username: username,
+          password: password
+        })
+      })
+        .then(response => {
+          if (response.ok) {
 
-  //         } else {
-  //           throw new Error('Failed to authenticate');
-  //         }
-  //       })
-  //       .catch(error => {
-  //         console.error(error);
-  //       });
-  //   } else {
-  //     alert('Please enter a username and password');
-  //   }
-  //   console.log('username: ', username, 'password: ', password);
-  // };
+          } else {
+            throw new Error('Failed to authenticate');
+          }
+        })
+        .catch(error => {
+          console.error(error);
+        });
+    } else {
+      alert('Please enter a username and password');
+    }
+    console.log('username: ', username, 'password: ', password);
+  };
 
   return (
     <div className="flex items-center justify-center">

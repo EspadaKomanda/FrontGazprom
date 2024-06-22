@@ -15,10 +15,9 @@ import rt from '../../public/rt.svg';
 
 export default function Settings({props}) {
     const [activeIndex, setActiveIndex] = useState(null);
-
     const [colorChooseCount, setColorChooseCount] = useState(1);
     const colorChooseComponents = Array.from({ length: colorChooseCount }, (_, index) => (
-        <ColorChoose key={index} />
+        <ColorChoose key={index} props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor}}/>
     ));
 
     const handleClick = (index) => {
@@ -38,7 +37,7 @@ export default function Settings({props}) {
     };
 
 
-    const [selectedImage, setSelectedImage] = useState(null);
+    
   const [lastClicked, setLastClicked] = useState(null);
 
     const handleImageClick = (index) => {
@@ -48,7 +47,6 @@ export default function Settings({props}) {
           setSelectedImage(index);
         }
         setLastClicked(index);
-        props.setData({ ...props.data, image_location: index });
       };
 
     return (

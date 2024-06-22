@@ -2,13 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 
-const ColorChoose = () => {
-    const [selectedColor, setSelectedColor] = useState('#ffffff');
+const ColorChoose = ({ props }) => {
+    
     const colorPicker = useRef(null);
     const colorDisplay = useRef(null);
 
     const handleColorChange = (event) => {
-        setSelectedColor(event.target.value);
+        console.log(props.selectedColor)
+        props.setSelectedColor(event.target.value);
         if (colorDisplay.current) {
             colorDisplay.current.style.backgroundColor = event.target.value;
         }
@@ -16,8 +17,8 @@ const ColorChoose = () => {
 
     return (<>
     
-    <input type="color" id="colorPicker" ref={colorPicker} value={selectedColor} onChange={handleColorChange} style={{display: 'none'}}></input>
-    <button onClick={() => colorPicker.current.click()} style={{backgroundColor: selectedColor}} className='p-5 rounded-md color-button'></button>
+    <input type="color" id="colorPicker" ref={colorPicker} value={props.selectedColor} onChange={handleColorChange} style={{display: 'none'}}></input>
+    <button onClick={() => colorPicker.current.click()} style={{ backgroundColor: props.selectedColor }} className='p-5 rounded-md color-button'></button>
     <div id="colorDisplay" ref={colorDisplay}></div>
     
     </>
