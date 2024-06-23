@@ -10,6 +10,7 @@ import Authentication from './authentication';
 import ProfilePopup from './profile';
 import Settings from './settings_component';
 import config from '../app/config';
+import ColorChoose from './color_choose_component';
 
 
 function AIChatComponent({props}) {
@@ -19,9 +20,6 @@ function AIChatComponent({props}) {
   const [themeId, setThemeId] = useState(1);
   const [isOpen, setIsOpen] = useState(false);
   const [settingsOn, setSettingsOn] = useState(false);
-
-
-
 
   const idChecker = async (e) => {
     setNewChat(false);
@@ -86,9 +84,40 @@ function AIChatComponent({props}) {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
 
+    
+
     const handleSendMessage = async () => {
-        console.log(props.transparentBackground);
-        console.log(props.useCustomColors);
+
+        const hexToRgb = (hex) => {
+            console.log(hex);
+            // Проверяем, что hex является строкой
+            if (typeof hex === 'string' && hex.startsWith('#') && hex.length === 7) {
+                // Извлекаем компоненты R, G, B из строки
+                let r = parseInt(hex.slice(1, 3), 16);
+                let g = parseInt(hex.slice(3, 5), 16);
+                let b = parseInt(hex.slice(5, 7), 16);
+        
+                // Возвращаем строку в формате RGB
+                return `${r}, ${g}, ${b}`;
+            } else {
+                // Возвращаем null, если формат не соответствует ожиданиям
+                return null;
+            }
+        };
+    
+        function convertArrayOfHexToArrayOfRgb(arrayOfHex) {
+            return arrayOfHex.map(innerArray => {
+                // Проверяем, есть ли во внутреннем массиве элементы
+                if (innerArray.length > 0) {
+                    // Используем первый элемент внутреннего массива для конвертации
+
+                    return hexToRgb(innerArray); // Используем уже определенную функцию hexToRgb
+                } else {
+                    return null; // Возвращаем null, если внутренний массив пуст
+                }
+            });
+        }
+        
         if (inputValue.trim() !== '') {
             const newMessage = {
                 id: messages.length + 1,
@@ -96,38 +125,42 @@ function AIChatComponent({props}) {
             };
             setMessages([...messages, newMessage]);
             setInputValue('');
-            setNewChat(false);
-    
+            setNewChat(false);  
 
-            const [imageUrls, setImageUrls] = useState([]);
+            const backgroundRgbArray = convertArrayOfHexToArrayOfRgb(props.individualColor);
+            const backgroundAlpha = props.transparentBackground ? '0' : '1';
+            const background = `${backgroundRgbArray[0]}, ${backgroundAlpha}`;
 
+            const json = JSON.stringify({
+                templateName: 'my-template',
+                text: newMessage.text,
+                imageText: '',
+                allowedColors: convertArrayOfHexToArrayOfRgb(props.selectedColor),
+                resolution: {
+                    width: parseInt(props.imageWidth, 10),
+                    height: parseInt(props.imageHeight, 10),
+                },
+                position: {
+                    position: props.lastClicked,
+                },
+                fontName: '',
+                background: background,
+                checkColours: props.useCustomColors,
+            })
+            console.log(json);
             try {
                 const response = await fetch(config.ImageAgrigation, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        templateName: 'my-template',
-                        text: newMessage.text,
-                        imageText: '',
-                        allowedColors: props.selectedColor,
-                        resolution: {
-                            width: props.imageWidth,
-                            height: props.imageHeight,
-                        },
-                        position: {
-                            position: props.lastClicked,
-                        },
-                        fontName: '',
-                        background: props.transparentBackground,
-                        checkColours: props.useCustomColors,
-                    }),
+
+                    body: json,
                 });
+                
+
+
                 if (response.ok) {
-                    const data = await response.json();
-                    const imageUrl = data.url;
-                    setImageUrls(prevUrls => [...prevUrls, imageUrl]);
                 } else {
                     console.error('Failed to send message');
                 }
@@ -239,7 +272,7 @@ return (
                 {authentication === false ? <Authentication onClose={handleImageClick}/> : <ProfilePopup onClose={handleImageClick} />}
             </div>
         </div>
-        {settingsOn ? <Settings props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor, lastClicked: props.lastClicked, setLastClicked: props.setLastClicked, imageHeight: props.imageHeight, setImageHeight: props.setImageHeight, imageWidth: props.imageWidth, setImageWidth: props.setImageWidth, useCustomColors: props.useCustomColors, setUseCustomColors: props.setUseCustomColors, transparentBackground: props.transparentBackground, setTransparentBackground: props.setTransparentBackground }} /> : null}
+        {settingsOn ? <Settings props={{individualColor: props.individualColor, setIndividualColor: props.setIndividualColor, selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor, lastClicked: props.lastClicked, setLastClicked: props.setLastClicked, imageHeight: props.imageHeight, setImageHeight: props.setImageHeight, imageWidth: props.imageWidth, setImageWidth: props.setImageWidth, useCustomColors: props.useCustomColors, setUseCustomColors: props.setUseCustomColors, transparentBackground: props.transparentBackground, setTransparentBackground: props.setTransparentBackground }} /> : null}
     </div>
 );
 }

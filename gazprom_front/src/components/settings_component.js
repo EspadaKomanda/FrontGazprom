@@ -20,6 +20,7 @@ export default function Settings({props}) {
         <ColorChoose key={index} props={{selectedColor: props.selectedColor, setSelectedColor: props.setSelectedColor, index: index}}/>
     ));
 
+    
 
     const handleClick = (index) => {
         if (activeIndex === index) {
@@ -31,7 +32,7 @@ export default function Settings({props}) {
 
     const handleAddColorChoose = () => {
         setColorChooseCount(colorChooseCount + 1);
-        props.setSelectedColor([...props.selectedColor, '#fff']);
+        props.setSelectedColor([...props.selectedColor, '#ffffff']);
     };
 
     const handleRemoveColorChoose = () => {
@@ -102,10 +103,9 @@ export default function Settings({props}) {
                 {activeIndex === 'colors' && (
                     <div className=' bg-blue-500 text-white px-3 py-5'>
                         <p className='mb-3 text-lg'>Настройки цветов</p>
-                        <form>
-                            <p>Использовать свои цвета<input type='checkbox' className='ml-2 editable-field' checked={props.useCustomColors} onChange={handleUseCustomColorsChange} /></p>
-                            <p>Прозрачный фон<input type='checkbox' className='ml-2 editable-field' checked={props.transparentBackground} onChange={handleTransparentBackgroundChange} /></p>
-                        </form>
+                        <p>Прозрачный фон<input type='checkbox' className='ml-2 editable-field' checked={props.transparentBackground} onChange={handleTransparentBackgroundChange} /></p>
+                        <ColorChoose props={{selectedColor: props.individualColor, setSelectedColor: props.setIndividualColor, index: 0}}/>
+                        <p>Использовать свои цвета<input type='checkbox' className='ml-2 editable-field' checked={props.useCustomColors} onChange={handleUseCustomColorsChange} /></p>
                         <div className='flex gap-3 mt-3 flex-wrap'>
                             {colorChooseComponents}
                         </div>
