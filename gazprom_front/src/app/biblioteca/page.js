@@ -52,6 +52,27 @@ function getPage(page) {
     return getImages().slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 }
 
+function getMaxPages() {
+    return 10;
+}
+
+function getRoles() {
+    return [
+        "admin",
+        "moder",
+        "user1",
+        "user2",
+        "user3",
+        "user4",
+        "user5",
+        "user6",
+        "user7",
+        "user8",
+        "user9",
+        "user10",
+    ]
+}
+
 export default function Biblioteca() {
 
     const [keywords, setKeywords] = useState([]);
@@ -59,6 +80,13 @@ export default function Biblioteca() {
     const [images, setImages] = useState([]);
     const [selectedImages, setSelectedImages] = useState([]);
     const [selectMode, setSelectMode] = useState(false);
+    const [maxPages, setMaxPages] = useState(0);
+    const [roles, setRoles] = useState([]);
+    const [selectedRoles, setSelectedRoles] = useState([]);
+
+    function getImagesFilterRoles() {
+        return
+    }
 
     function setPageImages(page) {
         setImages(getPage(page));
@@ -67,18 +95,24 @@ export default function Biblioteca() {
     useEffect(() => {
         setKeywords(getKeywords());
         setImages(getPage(0));
+        setMaxPages(getMaxPages);
+        setRoles(getRoles());
     }, []);
+
+    function downloadAllImage(image) {
+
+    }
 
     return (
         <>
             <div className={"flex flex-col items-center gap-6 pt-10"}>
                 <div className={"w-full"} style={{maxWidth: '1100px'}}>
-                    <Search_bar />
+                    <Search_bar props={{selectMode: selectMode, setSelectMode: setSelectMode, roles: roles, selectedRoles: selectedRoles, setSelectedRoles: setSelectedRoles, setSelectedImages: setSelectedImages}} />
                 </div>
                 <div className={"w-full"} style={{maxWidth: '1263px'}}>
                     <Filter_slider props={{keywords: keywords, selectedKeyword: selectedKeyword, setSelectedKeyword: setSelectedKeyword}} />
                 </div>
-                    <Image_container props={{images: images, setPageImages: setPageImages, selectedImages: selectedImages, setSelectedImages: setSelectedImages, selectMode: selectMode, setSelectMode: setSelectMode}} />
+                    <Image_container props={{images: images, setPageImages: setPageImages, selectedImages: selectedImages, setSelectedImages: setSelectedImages, selectMode: selectMode, maxPages: maxPages}} />
             </div>
 
         </>

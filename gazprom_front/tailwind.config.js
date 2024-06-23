@@ -11,6 +11,7 @@ module.exports = {
       invert: ['hover', 'focus'],
       colors: {
         'custom-gray': '#F4F6FA',
+        "custom-purple": "#554ECB",
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
