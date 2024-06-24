@@ -1,3 +1,4 @@
+"use client";
 import Cookies from 'js-cookie';
 import config from '../app/config';
 

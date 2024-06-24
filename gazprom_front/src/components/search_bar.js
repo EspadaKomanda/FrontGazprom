@@ -1,3 +1,4 @@
+"use client";
 import { FaMagnifyingGlass } from "react-icons/fa6";
 import { CiFilter } from "react-icons/ci";
 import { IoMdCheckmarkCircle } from "react-icons/io";

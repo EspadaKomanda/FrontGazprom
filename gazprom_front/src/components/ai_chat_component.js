@@ -25,7 +25,19 @@ function AIChatComponent({props}) {
   const [settingsOn, setSettingsOn] = useState(false);
 
 
-  const accessToken = localStorage.getItem('accessToken');
+  const [accessToken, setAccessToken] = useState(null);
+  // Other state declarations and component logic...
+
+  useEffect(() => {
+    // Access localStorage here, after component mount, to avoid errors during SSR
+    const token = localStorage.getItem('accessToken');
+    setAccessToken(token); // Now setAccessToken is defined and can be used
+
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
+    }
+  }, []);
 
   const idChecker = async (e) => {
     setNewChat(false);
