@@ -8,8 +8,10 @@ import avatar from '../../public/avatar.svg';
 import statistic from '../../public/statistic.svg';
 import Authentication from './authentication';
 import ProfilePopup from './profile';
+import librari from '../../public/library-svgrepo-com.svg';
 import Settings from './settings_component';
 import config from '../app/config';
+import Link from 'next/link';
 import Cookies from 'js-cookie';
 
 
@@ -22,6 +24,8 @@ function AIChatComponent({props}) {
   const [isOpen, setIsOpen] = useState(false);
   const [settingsOn, setSettingsOn] = useState(false);
 
+
+  const accessToken = localStorage.getItem('accessToken');
 
   const idChecker = async (e) => {
     setNewChat(false);
@@ -128,7 +132,7 @@ function AIChatComponent({props}) {
             const background = `${backgroundRgbArray[0]}, ${backgroundAlpha}`;
 
             const json = JSON.stringify({
-                templateName: 'my-template',
+                templateName: 'credit',
                 text: newMessage.text,
                 imageText: '',
                 allowedColors: convertArrayOfHexToArrayOfRgb(props.selectedColor),
@@ -140,7 +144,7 @@ function AIChatComponent({props}) {
                     position: props.lastClicked,
                 },
                 fontName: '',
-                background: background,
+                background: 'transparent',
                 checkColours: props.useCustomColors,
             })
             console.log(json);
@@ -149,6 +153,7 @@ function AIChatComponent({props}) {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
+                        'Authorization': `Access ${accessToken}`
                     },
 
                     body: json,
@@ -157,6 +162,10 @@ function AIChatComponent({props}) {
 
 
                 if (response.ok) {
+                    const { imageUrl } = await response.json();
+                    console.log(imageUrl);
+                    // const newImageUrl = imageUrl;
+                    // setImageUrls([...imageUrls, newImageUrl]);
                 } else {
                     console.error('Failed to send message');
                 }
@@ -192,6 +201,9 @@ return (
 )} */}
         <div className='flex-1 relative flex flex-col h-screen'>
             <div className='flex-1 overflow-auto p-7'>
+            <Link href="/biblioteca">
+                    <Image src={librari} alt="account" width={50} className="top-4 right-28 absolute"/>
+            </Link>
                 <Image src={account} alt="account" width={50} className='top-4 right-10 absolute' onClick={handleImageClick}/>
                 {newChat ? (
                     <div className='flex flex-col items-center justify-center h-full font-light'>
