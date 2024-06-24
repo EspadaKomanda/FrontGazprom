@@ -3,84 +3,60 @@ import config from '../app/config';
 
 
 export default function Authentication({ onClose }) {
-
-
-  const handleAuthentication = () => {
+  const handleAuthentication = async () => {
     const username = document.querySelector('input[type="text"]').value;
-    
     const password = document.querySelector('input[type="password"]').value;
     if (username && password) {
-      fetch(config.Auth, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          username: username,
-          password: password
-        })
-      })
-      .then(response => {
-        if (response.ok) {
-          response.json().then(data => {
-            localStorage.setItem('accessToken', data.accessToken);
-            Cookies.set("username", username, { expires: new Date(new Date().getTime() + (50 * 24 * 60 * 60 * 1000)) });
-            onClose();
+      try {
+        const authResponse = await fetch(config.Auth, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            username: username,
+            password: password
+          })
+        });
+        if (!authResponse.ok) throw new Error('Failed to authenticate');
+        const { accessToken } = await authResponse.json();
+        localStorage.setItem('accessToken', accessToken);
+        Cookies.set("username", username, { expires: new Date(new Date().getTime() + (50 * 24 * 60 * 60 * 1000)) });
 
-            fetch(config.User + `?username=${username}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Access ${localStorage.getItem('accessToken')}`
-                },
-            })
-            .then(response => {
-              if (response.ok) {
-                response.json().then(data => {
-                    console.log(data);
-                    const userId = data.id;
-                    Cookies.set("userId", userId, { expires: new Date(new Date().getTime() + (50 * 24 * 60 * 60 * 1000)) });
-                })
-              } else {
-                  throw new Error('Failed to take info');
-              }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        const userResponse = await fetch(config.User + `?username=${username}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Access ${accessToken}`
+          },
+        });
+        if (!userResponse.ok) throw new Error('Failed to take info');
+        const userData = await userResponse.json();
+        console.log(userData);
+        const userId = userData.id;
+        Cookies.set("userId", userId, { expires: new Date(new Date().getTime() + (50 * 24 * 60 * 60 * 1000)) });
 
-            fetch(config.getDialogsByOwnerId + `?OwnerId=4&Accessor=0` , {
-                method: 'GET',
-                headers: {
-                  'Content-Type': 'application/json',
-                  'Authorization': `Access ${localStorage.getItem('accessToken')}`
-                }
-            })
-            .then(async response => { // Добавляем async
-              if (response.ok) {
-                const DialogsList = await response.json(); // Добавляем await
-                console.log(DialogsList);
-                localStorage.setItem('dialogs', JSON.stringify(DialogsList));
-                // Создание и отправка кастомного события
-                const event = new CustomEvent('dialogsUpdated');
-                window.dispatchEvent(event);
-              } else {
-                throw new Error('Failed to take info about Templates');
-              }
-            })
-            .catch(error => {
-                console.error(error);
-            });
+        const dialogsResponse = await fetch(config.getDialogsByOwnerId + `?OwnerId=${userId}&Accessor=0`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Access ${accessToken}`
+          }
+        });
+        if (!dialogsResponse.ok) throw new Error('Failed to take info about Templates');
+        const DialogsList = await dialogsResponse.json();
+        console.log(DialogsList);
+        localStorage.setItem('dialogs', JSON.stringify(DialogsList));
 
-          });
-        } else {
-          throw new Error('Failed to authenticate');
-        }
-      })
-      .catch(error => {
+        // Dispatch custom event after dialogs are updated
+        const event = new CustomEvent('dialogsUpdated');
+        window.dispatchEvent(event);
+
+        onClose(); // Close the authentication modal/dialog
+      } catch (error) {
         console.error(error);
-        // Здесь можно добавить логику для отображения сообщения об ошибке
-      });
+        // Here, you can add logic to display the error message
+      }
     } else {
       alert('Please enter a username and password');
     }
