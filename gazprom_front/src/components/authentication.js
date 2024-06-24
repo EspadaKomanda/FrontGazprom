@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import config from '../app/config';
 
 
@@ -5,12 +6,10 @@ export default function Authentication({ onClose }) {
 
 
   const handleAuthentication = () => {
-
     const username = document.querySelector('input[type="text"]').value;
+    
     const password = document.querySelector('input[type="password"]').value;
-
     if (username && password) {
-
       fetch(config.Auth, {
         method: 'POST',
         headers: {
@@ -21,16 +20,63 @@ export default function Authentication({ onClose }) {
           password: password
         })
       })
-        .then(response => {
-          if (response.ok) {
+      .then(response => {
+        if (response.ok) {
+          response.json().then(data => {
+            localStorage.setItem('accessToken', data.accessToken);
+            Cookies.set("username", username, { expires: new Date(new Date().getTime() + (50 * 24 * 60 * 60 * 1000)) });
+            onClose();
 
-          } else {
-            throw new Error('Failed to authenticate');
-          }
-        })
-        .catch(error => {
-          console.error(error);
-        });
+            fetch(config.User + `?username=${username}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Access ${localStorage.getItem('accessToken')}`
+                },
+            })
+            .then(response => {
+              if (response.ok) {
+                response.json().then(data => {
+                    console.log(data);
+                    const userId = data.id;
+                    Cookies.set("userId", userId, { expires: new Date(new Date().getTime() + (50 * 24 * 60 * 60 * 1000)) });
+                })
+              } else {
+                  throw new Error('Failed to take info');
+              }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+            fetch(config.getDialogsByOwnerId + `?OwnerId=4&Accessor=0` , {
+                method: 'GET',
+                headers: {
+                  'Content-Type': 'application/json',
+                  'Authorization': `Access ${localStorage.getItem('accessToken')}`
+                }
+            })
+            .then(response => {
+              if (response.ok) {
+                  const DialogsList = response.json();
+                  console.log(DialogsList);
+              } else {
+                  throw new Error('Failed to take info about Templates');
+              }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+
+          });
+        } else {
+          throw new Error('Failed to authenticate');
+        }
+      })
+      .catch(error => {
+        console.error(error);
+        // Здесь можно добавить логику для отображения сообщения об ошибке
+      });
     } else {
       alert('Please enter a username and password');
     }
@@ -68,19 +114,9 @@ export default function Authentication({ onClose }) {
                   type="button"
                   onClick={() => {
                     handleAuthentication();
-                    onClose();
                   }}
                 >
                   Войти
-                </button>
-              </div>
-              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                <button
-                  type="button"
-                  className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                  onClick={onClose}
-                >
-                  Закрыть
                 </button>
               </div>
             </div>

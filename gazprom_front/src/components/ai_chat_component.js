@@ -10,7 +10,8 @@ import Authentication from './authentication';
 import ProfilePopup from './profile';
 import Settings from './settings_component';
 import config from '../app/config';
-import ColorChoose from './color_choose_component';
+import Cookies from 'js-cookie';
+
 
 
 function AIChatComponent({props}) {
@@ -21,16 +22,11 @@ function AIChatComponent({props}) {
   const [isOpen, setIsOpen] = useState(false);
   const [settingsOn, setSettingsOn] = useState(false);
 
+
   const idChecker = async (e) => {
     setNewChat(false);
     setThemeId(e);
-    console.log(newChat);
-    if (newChat) {
-        const response = await fetch(config.User);
-        const userInfo = await response.json();
-        
-    }
-}
+  };
 
   useEffect(() => {
     if (textareaRef.current) {
