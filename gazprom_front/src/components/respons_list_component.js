@@ -10,6 +10,36 @@ const ResponsList = () => {
     const [editingIndex, setEditingIndex] = useState(null);
     const [tempName, setTempName] = useState(""); // Новое состояние для временного имени
 
+    const handleAdd = () => {
+        fetch(config.createDialog, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Access ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({
+                ownerId: userId,
+                accessor: 0,
+                name: 'новый диалог' // Используем tempName как имя нового диалога
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json(); // Предполагаем, что API возвращает добавленный диалог
+            } else {
+                throw new Error('Failed to add the dialog');
+            }
+        })
+        .then(newDialog => {
+            const updatedDialogs = [newDialog, ...dialogs]; // Добавляем новый диалог в состояние
+            setDialogs(updatedDialogs);
+            localStorage.setItem('dialogs', JSON.stringify(updatedDialogs)); // Обновляем локальное хранилище
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    };
+
     const userId = Cookies.get('userId');
     useEffect(() => {
         const loadDialogs = () => {
@@ -77,6 +107,7 @@ const ResponsList = () => {
     return (
         <>
             <div>
+            <button onClick={handleAdd} className="add-btn px-2 mb-5 rounded-md border-gray-400  text-white bg-blue-500">Add Dialog</button>
                 <ul>
                 {dialogs.map((dialog, index) => (
                     <li key={dialog.id} className="text-sm mb-3">

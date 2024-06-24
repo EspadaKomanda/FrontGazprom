@@ -3,6 +3,7 @@ const config = {
     User: 'http://90.156.218.15:5220/User/getUserByUsername',
     Message: 'http://api/Message/send-message',
     deleteDialog: 'http://90.156.218.15:5220/Dialog/deleteDialog',
+    createDialog: 'http://90.156.218.15:5220/Dialog/createDialog',
     getDialogsByOwnerId: 'http://90.156.218.15:5220/Dialog/getDialogsByOwnerId',
     ImageAgrigation: 'http://90.156.218.15:5220/ImageAgregation/generateImage',
     getImagesPage: "http://90.156.218.15:5220/ImageAgregation/getImagesPage/",
