@@ -2,35 +2,15 @@
 import { useState, useEffect } from "react";
 import Image from 'next/image';
 import Pen from '../../public/pen.svg';
+import config from '../app/config';
+import Cookies from "js-cookie";
 
 const ResponsList = () => {
     const [dialogs, setDialogs] = useState([]);
     const [editingIndex, setEditingIndex] = useState(null);
     const [tempName, setTempName] = useState(""); // Новое состояние для временного имени
 
-    // fetch(config.deleteDialog + `?OwnerId=4&Accessor=0` , {
-    //     method: 'GET',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //       'Authorization': `Access ${localStorage.getItem('accessToken')}`
-    //     }
-    // })
-    // .then(async response => { // Добавляем async
-    //   if (response.ok) {
-    //     const DialogsList = await response.json(); // Добавляем await
-    //     console.log(DialogsList);
-    //     localStorage.setItem('dialogs', JSON.stringify(DialogsList));
-    //     // Создание и отправка кастомного события
-    //     const event = new CustomEvent('dialogsUpdated');
-    //     window.dispatchEvent(event);
-    //   } else {
-    //     throw new Error('Failed to take info about Templates');
-    //   }
-    // })
-    // .catch(error => {
-    //     console.error(error);
-    // });
-
+    const userId = Cookies.get('userId');
     useEffect(() => {
         const loadDialogs = () => {
             const storedDialogs = localStorage.getItem('dialogs');
@@ -61,35 +41,64 @@ const ResponsList = () => {
         updatedDialogs[editingIndex].name = tempName;
         setDialogs(updatedDialogs);
         localStorage.setItem('dialogs', JSON.stringify(updatedDialogs));
-        setEditingIndex(null);
+        setEditingIndex(null); // Сброс индекса редактирования для выхода из режима редактирования
         setTempName(""); // Сброс временного имени
+    };
+    
+    const handleDelete = () => {
+        const dialogId = dialogs[editingIndex].id;
+        fetch(config.deleteDialog, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Access ${localStorage.getItem('accessToken')}`
+            },
+            body: JSON.stringify({
+                ownerId: userId,
+                accessor: 0,
+                id: dialogId
+            })
+        })
+        .then(response => {
+            if (response.ok) {
+                // Удаление диалога из состояния после подтверждения удаления
+                const updatedDialogs = dialogs.filter(dialog => dialog.id !== dialogId);
+                setDialogs(updatedDialogs);
+                localStorage.setItem('dialogs', JSON.stringify(updatedDialogs));
+            } else {
+                throw new Error('Failed to delete the dialog');
+            }
+        })
+        .catch(error => {
+            console.error(error);
+        });
     };
 
     return (
         <>
             <div>
                 <ul>
-                    {dialogs.map((dialog, index) => (
-                        <li key={index} className="text-sm mb-3">
-                            {editingIndex === index ? (
-                                <>
-                                    <input
-                                        type="text"
-                                        value={tempName}
-                                        onChange={(e) => handleChange(e.target.value)}
-                                        className="editable-field-input max-w-44 bg-indigo-100"
-                                    />
-                                    <button onClick={handleSave} className="save-btn mr-2">Save</button>
-                                    <button onClick={handleSave} className="save-btn">Delete</button>
-                                </>
-                            ) : (
-                                <span className="editable-field">
-                                    {dialog.name}
-                                </span>
-                            )}
-                            <Image src={Pen} alt="pencil" className="inline-block ml-2" onClick={() => handleEditClick(index)} />
-                        </li>
-                    ))}
+                {dialogs.map((dialog, index) => (
+                    <li key={dialog.id} className="text-sm mb-3">
+                        {editingIndex === index ? (
+                            <>
+                                <input
+                                    type="text"
+                                    value={tempName}
+                                    onChange={(e) => handleChange(e.target.value)}
+                                    className="editable-field-input max-w-44 bg-indigo-100"
+                                />
+                                <button onClick={() => handleSave('save')} className="save-btn mr-2">Save</button>
+                                <button onClick={() => handleDelete()} className="delete-btn">Delete</button>
+                            </>
+                        ) : (
+                            <span className="editable-field">
+                                {dialog.name}
+                            </span>
+                        )}
+                        <Image src={Pen} alt="pencil" className="inline-block ml-2" onClick={() => handleEditClick(index)} />
+                    </li>
+                ))}
                 </ul>
             </div>
         </>
