@@ -36,10 +36,16 @@ export default function Search_bar({props}) {
                                         props.roles.map((role, index) => (
                                             <button
                                                 key={index}
-                                                className={`rounded-lg p-1 pl-2 w-full text-start text-white ${props.selectedRoles?.includes(role) ? "bg-custom-purple" : ""}`}
-                                                onClick={() => props.setSelectedRoles([...props.selectedRoles, role])}
+                                                className={`rounded-lg p-1 pl-2 w-full text-start text-white ${props.selectedRoles?.includes(role.name) ? "bg-custom-purple" : ""}`}
+                                                onClick={() => {
+                                                    if (props.selectedRoles.includes(role.name)) {
+                                                        props.setSelectedRoles(props.selectedRoles.filter(item => item !== role.name));
+                                                    } else {
+                                                        props.setSelectedRoles([...props.selectedRoles, role.name]);
+                                                    }
+                                                }}
                                             >
-                                                {role}
+                                                {role.name}
                                             </button>
                                         ))
                                     }
@@ -78,7 +84,12 @@ export default function Search_bar({props}) {
                                         style={{width: "110px"}}>
                                     <button
                                         className={"text-white hover:text-gray-200"}
-                                        onClick={() => props.setSelectedRoles([])}
+                                        onClick={() => {
+                                            props.download();
+                                            props.setSelectedImages([])
+                                            props.setSelectMode(false)
+                                        }
+                                        }
                                     >
                                         Скачать
                                     </button>

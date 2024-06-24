@@ -44,12 +44,12 @@ export default function Filter_slider({props}) {
 
                             return (
                                 <div
-                                    className={props.selectedKeyword.includes(props.keywords[actualIndex]) ? "bg-blue-500 text-white rounded-lg p-1 pr-3 pl-3 cursor-pointer w-full text-center" : "bg-gray-200 text-black rounded-lg p-1 pr-3 pl-3 cursor-pointer w-full text-center"}
+                                    className={props.selectedKeyword.includes(props.keywords[actualIndex].keyWord) ? "bg-blue-500 text-white rounded-lg p-1 pr-3 pl-3 cursor-pointer w-full text-center" : "bg-gray-200 text-black rounded-lg p-1 pr-3 pl-3 cursor-pointer w-full text-center"}
                                     key={index}
-                                    onClick={() => handleSelectKeyword(props.keywords[actualIndex])}
+                                    onClick={() => handleSelectKeyword(props.keywords[actualIndex].keyWord)}
                                     style={{userSelect: 'none'}}
                                 >
-                                    {props.keywords[actualIndex]}
+                                    {props.keywords[actualIndex].keyWord}
                                 </div>
                             );
                         })

@@ -8,13 +8,13 @@ function Image_box({props}) {
     const [hovered, setHovered] = useState(false);
 
     const handleDownload = () => {
-        fetch(props.image)
+        fetch(props.image.url)
             .then(response => response.blob())
             .then(blob => {
                 const url = window.URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
-                link.setAttribute('download', 'image.jpg');
+                link.setAttribute('download',  props.image.name + '.png');
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
@@ -28,10 +28,10 @@ function Image_box({props}) {
                 onMouseEnter={() => setHovered(true)}
                 onMouseLeave={() => setHovered(false)}
             >
-                <a href={props.image} download>
+                <a href={props.image.url} download>
                     <Image
                         className={"rounded-lg border-2 border-gray-500 shadow shadow-gray-500"}
-                        src={props.image} alt={"image"} width={192} height={192}
+                        src={props.image.url} alt={"image"} width={192} height={192}
                         placeholder={"blur"}
                         blurDataURL={"https://image.civitai.com/xG1nkqKTMzGDvpLrqFT7WA/96595bcc-dee6-435c-ae56-babfb4a03f82/width=1152,quality=90/20240613001400%2057465469%20by%20Ted%20Nasmith%20and%20[Boris%20Kustodiev_Greg%20Hildebrandt]%20in%20the%20style%20of%20[Alena%20Aenami_Leiji%20Matsumoto_0.25].jpeg"}
                     />
@@ -40,16 +40,16 @@ function Image_box({props}) {
                         props.selectMode &&
                         <>
                             {
-                                props.selectedImages.includes(props.image) ?
+                                props.selectedImages.includes(props.image.id) ?
                                     <div className={`absolute top-0 m-2 z-10 ${hovered ? "right-7" : "right-0"}`}>
                                         <IoMdCheckmarkCircle
                                             className="text-white hover:text-blue-500 h-6 w-6 cursor-pointer"
-                                            onClick={() => props.setSelectedImages(props.selectedImages.filter(image => image !== props.image))}/>
+                                            onClick={() => props.setSelectedImages(props.selectedImages.filter(image => image !== props.image.id))}/>
                                     </div> :
                                     <div className={`absolute top-0 m-2 z-10 right-7 ${hovered ? "opacity-100" : "opacity-0"}`}>
                                         <div
                                             className={"w-6 h-6 rounded-full bg-opacity-0 border-2 border-white"}
-                                            onClick={() => props.setSelectedImages([...props.selectedImages, props.image])}
+                                            onClick={() => props.setSelectedImages([...props.selectedImages, props.image.id])}
                                         >
                                         </div>
                                     </div>
@@ -76,7 +76,7 @@ function PageNavigation({props}) {
         <>
             <div className={"flex flex-row gap-2 items-center"}>
                 {
-                    props.page === 0 ?
+                    props.page === 1 ?
                         <p className={"h-8 w-8"}/>
                         :
                         <IoIosArrowBack className={"h-8 w-8 text-blue-500 cursor-pointer"}
@@ -89,11 +89,11 @@ function PageNavigation({props}) {
                         className={"bg-blue-500 text-white rounded-lg pt-1 pb-1 cursor-pointer w-8 h-8 text-center"}
                         style={{userSelect: 'none'}}
                     >
-                        {props.page + 1}
+                        {props.page}
                     </div>
                 </div>
                 {
-                    props.page === props.maxPages - 1 ?
+                    props.page <= props.maxPages ?
                         <p className={"h-8 w-8"}/>
                         :
                         <IoIosArrowForward className={"h-8 w-8 text-blue-500 cursor-pointer"}
@@ -106,19 +106,19 @@ function PageNavigation({props}) {
 }
 
 export default function Image_container({props}) {
-    const [currentPage, setCurrentPage] = useState(0);
 
     const nextPage = () => {
-        props.setPageImages(currentPage + 1)
-        setCurrentPage(currentPage + 1);
+        if (props.page === props.maxPages) {
+            return;
+        }
+        props.setCurrentPage(props.page + 1);
     };
 
     const prevPage = () => {
-        if (currentPage === 0) {
+        if (props.page === 1) {
             return;
         }
-        props.setPageImages(currentPage - 1)
-        setCurrentPage(currentPage - 1);
+        props.setCurrentPage(currentPage - 1);
     };
 
     return (
@@ -133,7 +133,7 @@ export default function Image_container({props}) {
                     }}/>
                 ))}
             </div>
-            <PageNavigation props={{page: currentPage, maxPages: props.maxPages, nextPage: nextPage, prevPage: prevPage}}/>
+            <PageNavigation props={{page: props.page, maxPages: props.maxPages, nextPage: nextPage, prevPage: prevPage}}/>
             <p className={"pb-2"}></p>
         </>
     );
