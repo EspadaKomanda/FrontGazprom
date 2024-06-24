@@ -56,12 +56,16 @@ export default function Authentication({ onClose }) {
                   'Authorization': `Access ${localStorage.getItem('accessToken')}`
                 }
             })
-            .then(response => {
+            .then(async response => { // Добавляем async
               if (response.ok) {
-                  const DialogsList = response.json();
-                  console.log(DialogsList);
+                const DialogsList = await response.json(); // Добавляем await
+                console.log(DialogsList);
+                localStorage.setItem('dialogs', JSON.stringify(DialogsList));
+                // Создание и отправка кастомного события
+                const event = new CustomEvent('dialogsUpdated');
+                window.dispatchEvent(event);
               } else {
-                  throw new Error('Failed to take info about Templates');
+                throw new Error('Failed to take info about Templates');
               }
             })
             .catch(error => {

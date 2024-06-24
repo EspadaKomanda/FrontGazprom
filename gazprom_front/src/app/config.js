@@ -1,8 +1,9 @@
 const config = {
-    Auth: 'http://176.57.213.45:5220/Auth/login',
-    User: 'http://api',
+    Auth: 'http://90.156.218.15:5220/Auth/login',
+    User: 'http://90.156.218.15:5220/User/getUserByUsername',
     Message: 'http://api/Message/send-message',
-    ImageAgrigation: 'http://176.57.213.45:5220/ImageAgregation/generateImage',
+    getDialogsByOwnerId: 'http://90.156.218.15:5220/Dialog/getDialogsByOwnerId',
+    ImageAgrigation: 'http://90.156.218.15:5220/ImageAgregation/generateImage',
     getImagesPage: "http://90.156.218.15:5220/ImageAgregation/getImagesPage/",
     getImagesZip: "http://90.156.218.15:5220/ImageAgregation/getSpecificImages",
     getPagesCount: "http://90.156.218.15:5220/ImageAgregation/getPagesCount",

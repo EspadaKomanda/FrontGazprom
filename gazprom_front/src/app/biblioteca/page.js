@@ -144,7 +144,6 @@ export default function Biblioteca() {
     }
 
     useEffect(() => {
-        localStorage.setItem("accessToken", "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6InRlc3R1c2VyIiwicm9sZSI6IlVzZXIiLCJhdXRobWV0aG9kIjoiQWNjZXNzIiwibmJmIjoxNzE5MTg1MzE3LCJleHAiOjE3MTkxODgzMTcsImlhdCI6MTcxOTE4NTMxNywiaXNzIjoicGl6ZGV0cyIsImF1ZCI6InBpemR5YXRhIn0.6zyjbDZYSdUIODnmgQYtbvb7YGNGAPNpnO7b3l6eLME")
         getKeywords();
         getMaxPages();
         getRoles();

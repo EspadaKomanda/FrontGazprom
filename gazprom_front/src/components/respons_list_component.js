@@ -1,27 +1,44 @@
-"use client";
-
-import { useState, useRef, useEffect } from "react";
+'use client';
+import { useState, useEffect } from "react";
 import Image from 'next/image';
 import Pen from '../../public/pen.svg';
-import React from 'react';
-import config from '../app/config';
-import Cookies from 'js-cookie';
 
 const ResponsList = () => {
+    const [dialogs, setDialogs] = useState([]);
 
+    useEffect(() => {
+        const loadDialogs = () => {
+            const storedDialogs = localStorage.getItem('dialogs');
+            if (storedDialogs) {
+                const parsedDialogs = JSON.parse(storedDialogs);
+                setDialogs(parsedDialogs);
+            }
+        };
+    
+        loadDialogs();
+        const handleDialogsUpdate = () => {
+            loadDialogs();
+        };
+
+        window.addEventListener('dialogsUpdated', handleDialogsUpdate);
+
+        return () => {
+            window.removeEventListener('dialogsUpdated', handleDialogsUpdate);
+        };
+    }, []);
 
     return (
         <>
             <div>
                 <ul>
-                    <li className="text-sm mb-3" >
-                        <span 
-                        className="editable-field"
-                        onKeyDown={(e) => { if (e.key === 'Enter') e.currentTarget.blur(); }}
-                        >
-                        </span>
-                        <Image src={Pen} alt="pencil" className="inline-block ml-2" onClick={() => handleClick(index)} />
-                    </li>
+                    {dialogs.map((dialog, index) => (
+                        <li key={index} className="text-sm mb-3">
+                            <span className="editable-field">
+                                {dialog.name} {/* Предполагается, что у диалога есть свойство name */}
+                            </span>
+                            <Image src={Pen} alt="pencil" className="inline-block ml-2" onClick={() => {/* Обработчик клика */}} />
+                        </li>
+                    ))}
                 </ul>
             </div>
         </>

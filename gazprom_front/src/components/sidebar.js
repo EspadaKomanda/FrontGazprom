@@ -3,7 +3,7 @@ import Image from 'next/image';
 import ResponsList from './respons_list_component';
 
 
-export default function SideBare({props}) {
+export default function SideBare({}) {
 
     return (
         <div className="bg-indigo-100 w-1/5 max-w-80 p-6 pr-2 h-screen overflow-y-auto scrollbar-hide font-light border-r-2 border-r-gray-400">
